@@ -4,6 +4,7 @@ mod file_encoder;
 mod streaming_encoder;
 
 pub use block_encoder::TOABlockWriter;
+pub use ecc_encoder::ECCEncoder;
 #[cfg(feature = "std")]
 pub use file_encoder::TOAFileEncoder;
 pub use streaming_encoder::TOAStreamingEncoder;

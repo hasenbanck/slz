@@ -57,7 +57,7 @@ pub use decoder::TOAFileDecoder;
 pub use decoder::TOAStreamingDecoder;
 #[cfg(feature = "std")]
 pub use encoder::TOAFileEncoder;
-pub use encoder::{TOABlockWriter, TOAOptions, TOAStreamingEncoder};
+pub use encoder::{ECCEncoder, TOABlockWriter, TOAOptions, TOAStreamingEncoder};
 pub use header::{TOABlockHeader, TOAHeader};
 pub use metadata::TOAMetadata;
 #[cfg(not(feature = "std"))]
@@ -291,5 +291,39 @@ impl<R: Read> Read for LimitedReader<R> {
         let bytes_read = self.inner.read(&mut buf[..max_read])?;
         self.remaining -= bytes_read as u64;
         Ok(bytes_read)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    pub(crate) struct Lcg(u64);
+
+    impl Lcg {
+        pub(crate) fn new(seed: u64) -> Self {
+            Lcg(seed)
+        }
+
+        pub(crate) fn next_u64(&mut self) -> u64 {
+            self.0 = self.0.wrapping_mul(0xDA942042E4DD58B5);
+            self.0.wrapping_shr(64)
+        }
+
+        pub(crate) fn next_u8(&mut self) -> u8 {
+            let next = self.next_u64();
+            (next >> 16) as u8
+        }
+
+        pub(crate) fn next_usize(&mut self, max: usize) -> usize {
+            let next = self.next_u64();
+            next as usize % max
+        }
+
+        pub(crate) fn fill_buffer(&mut self, buf: &mut [u8]) {
+            for chunk in buf.chunks_mut(8) {
+                let next = self.next_u64();
+                let bytes = next.to_le_bytes();
+                chunk.copy_from_slice(&bytes[..chunk.len()]);
+            }
+        }
     }
 }

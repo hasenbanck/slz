@@ -8,9 +8,10 @@ mod file_decoder;
 pub use file_decoder::TOAFileDecoder;
 pub use streaming_decoder::TOAStreamingDecoder;
 
+pub(crate) use ecc_decoder::ECCDecoder;
+
 use crate::{
     ErrorCorrection, Prefilter, Read, Result,
-    decoder::ecc_decoder::ECCDecoder,
     lzma::{LZMA2sDecoder, filter::bcj::BCJDecoder},
 };
 
