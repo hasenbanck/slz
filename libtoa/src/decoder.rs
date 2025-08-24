@@ -4,11 +4,10 @@ mod streaming_decoder;
 #[cfg(feature = "std")]
 mod file_decoder;
 
+pub use ecc_decoder::ECCDecoder;
 #[cfg(feature = "std")]
 pub use file_decoder::TOAFileDecoder;
 pub use streaming_decoder::TOAStreamingDecoder;
-
-pub(crate) use ecc_decoder::ECCDecoder;
 
 use crate::{
     ErrorCorrection, Prefilter, Read, Result,

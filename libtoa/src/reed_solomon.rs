@@ -88,7 +88,7 @@ mod primitives {
     }
 
     #[inline]
-    const fn gf_alpha_pow(power: isize) -> u8 {
+    pub(crate) const fn gf_alpha_pow(power: isize) -> u8 {
         let mut p = power % 255;
         if p < 0 {
             p += 255;
@@ -152,7 +152,7 @@ mod primitives {
     }
 
     #[inline]
-    fn poly_eval(poly: &[u8], len: usize, x: u8) -> u8 {
+    pub(crate) fn poly_eval(poly: &[u8], len: usize, x: u8) -> u8 {
         if len == 0 {
             return 0;
         }
@@ -1351,3 +1351,6 @@ pub(crate) fn get_generator_poly<const PARITY_LEN: usize>() -> &'static [u8] {
         _ => panic!("Unsupported parity length"),
     }
 }
+
+/// Export GF(256) utilities for SIMD operations
+pub(crate) use primitives::gf_alpha_pow;

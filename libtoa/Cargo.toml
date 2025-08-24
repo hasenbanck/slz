@@ -17,6 +17,7 @@ hex = "0.4.3"
 
 [dev-dependencies]
 hex-literal = { workspace = true }
+criterion = { version = "0.5", features = ["html_reports"] }
 
 [features]
 default = ["std", "optimization"]
@@ -28,3 +29,7 @@ optimization = ["std"]
 [package.metadata.docs.rs]
 features = ["std", "optimization"]
 rustdoc-args = ["--cfg", "docsrs"]
+
+[[bench]]
+name = "simd_syndrome"
+harness = false
